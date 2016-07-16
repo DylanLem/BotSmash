@@ -12,33 +12,49 @@ namespace ConsoleApplication5
         private int health;
         private int strength;
         static Random random = new Random();
+        static List<string> blacklist = new List<string>(2) {"",""};
+        
+        string[] firstNameArray = new string[] { "Skullcrusher", "John", "Wackbot", "Hammerteeth", "Metalscythe", "Megasmash", "Robro","Twisted Metal","Death-Metal","Humanbot",};
+        string[] secondNameArray = new string[] { "McGee", "Smasherson", "Wheelsmith", "Anvilwright", "Cogsworth", "the Wicked",};
         public Bot()
         {
-            this.name = GetName();
-            this.health = GetHealth();
-            this.strength = GetStrength();
-        }
-
-        private string GetName()
-        {
-             
-
-            string[] firstName = new string[6] {"Skullcrusher","John","Wackbot","Hammerteeth","Metalscythe","Megasmash"};
-            string[] secondName = new string[6] { "McGee", "Smasherson","Wheelsmith","Anvilwright","Cogsworth","the Wicked"};
             
-            return (firstName[random.Next(0, 6)] + " " + secondName[random.Next(0,6)]);
+            this.name = SetName();
+            this.health = SetHealth();
+            this.strength = SetStrength();
         }
 
-        private int GetHealth()
+        private string SetName()
+        {
+            //FIX THIS SHIT YOU SHITTY PERSON
+            
+            string firstName = firstNameArray[random.Next(0, firstNameArray.Length-1)];
+            string secondName = secondNameArray[random.Next(0, secondNameArray.Length - 1)];
+            
+
+            if (firstName == blacklist.ElementAt(0) | secondName == blacklist.ElementAt(1)) 
+            {
+                //this is dum i think, but mayb good recursion? :)?
+                name = SetName();
+                return name;               
+            }
+
+            blacklist.Insert(0, firstName);
+            blacklist.Insert(1, secondName);    
+
+            return (firstName + " " + secondName);
+        }
+
+        private int SetHealth()
         {
             return random.Next(1,101) + 10;
         }
-        private int GetStrength()
+        private int SetStrength()
         {
             return random.Next(1, 31) + 5;
         }
 
-        public string DisplayInfo(string parameter)
+        public string GetInfo(string parameter)
         {
             switch (parameter)
             {
@@ -68,16 +84,17 @@ namespace ConsoleApplication5
                 bot2.health -= bot1.MakeAttack(bot1.strength);
                 if (bot1.health < 0) bot1.health = 0;
                 if (bot2.health < 0) bot2.health = 0;
+                
                 if (decide.ToUpper() == "W")
                 {
-                    Console.WriteLine("\n" + bot1.DisplayInfo("name") + ": " + bot1.DisplayInfo("health") + " health");
-                    Console.WriteLine(bot2.DisplayInfo("name") + ": " + bot2.DisplayInfo("health") + " health");
+                    Console.WriteLine("\n" + bot1.GetInfo("name") + ": " + bot1.GetInfo("health") + " health");
+                    Console.WriteLine(bot2.GetInfo("name") + ": " + bot2.GetInfo("health") + " health");
                     System.Threading.Thread.Sleep(250);
                 }
             }
             Console.WriteLine("\n");
-            if (bot1.health == 0) Console.WriteLine(bot2.DisplayInfo("name") + " wins!");
-            else if (bot2.health == 0) Console.WriteLine(bot1.DisplayInfo("name") + " wins!");
+            if (bot1.health == 0) Console.WriteLine(bot2.GetInfo("name") + " wins!");
+            else if (bot2.health == 0) Console.WriteLine(bot1.GetInfo("name") + " wins!");
             else Console.WriteLine("They killed eachother!");
 
 
